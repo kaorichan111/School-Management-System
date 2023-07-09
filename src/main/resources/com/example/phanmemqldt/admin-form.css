@@ -1,0 +1,38 @@
+.container {
+    -fx-background-color: #ffffff;
+}
+
+.slider {
+    -fx-background-color: #ddd;
+
+}
+
+.button-slider {
+    -fx-background-color: #ddd;
+}
+
+.icon-slider {
+
+    -fx-background-color: black;
+
+}
+
+.button-slider:hover
+{
+    -fx-background-color: rgba(239, 246, 255, 1);
+    -fx-text-fill: rgba(45, 104, 254, 1);
+    -fx-cursor: hand;
+}
+
+.button-slider:hover .icon-slider {
+    -fx-fill: red;
+    -fx-fill: rgba(45, 104, 254, 1);
+
+}
+
+.button-slider:pressed
+{
+    -fx-background-color: rgba(239, 246, 255, 1);
+    -fx-text-fill: rgba(45, 104, 254, 1);
+    -fx-cursor: hand;
+}

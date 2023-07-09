@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="892.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.AdminController">
+   <children>
+      <VBox fx:id="VBoxAdmin" layoutY="2.0" prefHeight="888.0" prefWidth="337.0">
+         <children>
+            <AnchorPane fx:id="Slider" prefHeight="888.0" prefWidth="310.0" styleClass="slider">
+               <children>
+                  <Button fx:id="TeacherInforBtn" layoutY="278.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý giáo viên">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="INFO_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="SubjectmanageBtn" layoutY="364.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý môn học">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BOOK" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="ClassmanageBtn" layoutY="452.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp học">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BRIEFCASE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <FontAwesomeIconView glyphName="USER" layoutX="125.0" layoutY="128.0" size="75" />
+                  <Label layoutX="109.0" layoutY="162.0" text="Xin Chào">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="AccountBtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USER_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+               </children>
+               <stylesheets>
+                  <URL value="@admin-form.css" />
+                  <URL value="@admin-form.css" />
+               </stylesheets>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <AnchorPane fx:id="TeacherinforBlock" layoutX="337.0" prefHeight="888.0" prefWidth="891.0" visible="false">
+         <children>
+            <TextField fx:id="SearchBtn1" layoutX="11.0" layoutY="36.0" prefHeight="30.0" prefWidth="325.0" promptText="Tìm kiếm" styleClass="searchbtn" stylesheets="@loginform.css" />
+            <FontAwesomeIconView fill="#907d7d" glyphName="SEARCH" layoutX="14.0" layoutY="56.0" size="15.0" />
+            <TableView fx:id="TableTeacher" layoutX="11.0" layoutY="127.0" prefHeight="327.0" prefWidth="699.0">
+               <columns>
+                  <TableColumn fx:id="teacherid_col" prefWidth="66.0" text="Id" />
+                  <TableColumn fx:id="teachername_col" prefWidth="123.0" text="Họ và tên" />
+                  <TableColumn fx:id="genderteacher_col" prefWidth="81.0" text="Giới tính" />
+                  <TableColumn fx:id="birthdayteacher_col" prefWidth="96.0" text="Ngày sinh" />
+                  <TableColumn fx:id="addressteacher_col" prefWidth="92.0" text="Địa chỉ" />
+                  <TableColumn fx:id="workyear_col" prefWidth="100.0" text="Năm làm việc" />
+                  <TableColumn fx:id="salary_col" prefWidth="140.0" text="Lương" />
+               </columns>
+            </TableView>
+            <Label layoutX="28.0" layoutY="572.0" prefHeight="25.0" prefWidth="59.0" text="Họ và tên :" />
+            <TextField fx:id="Nametf" layoutX="112.0" layoutY="572.0" prefHeight="25.0" prefWidth="174.0" />
+            <Label layoutX="28.0" layoutY="624.0" prefHeight="17.0" prefWidth="59.0" text="Giới tính :" />
+            <ComboBox fx:id="GenderBox" layoutX="112.0" layoutY="620.0" prefHeight="25.0" prefWidth="174.0" />
+            <Label layoutX="28.0" layoutY="669.0" text="Ngày sinh :" />
+            <DatePicker fx:id="BirthDayBox" layoutX="112.0" layoutY="665.0" />
+            <Label layoutX="29.0" layoutY="720.0" text="Địa chỉ : " />
+            <TextField fx:id="Addresstf" layoutX="112.0" layoutY="716.0" prefHeight="25.0" prefWidth="174.0" />
+            <TextField fx:id="WorkYearBox" layoutX="507.0" layoutY="572.0" prefHeight="25.0" prefWidth="174.0" />
+            <Button fx:id="AddTeacherBtn" layoutX="48.0" layoutY="782.0" mnemonicParsing="false" onAction="#addTeacher" prefHeight="25.0" prefWidth="64.0" text="Thêm" />
+            <Button fx:id="ClearBtn" layoutX="216.0" layoutY="782.0" mnemonicParsing="false" onAction="#clear" prefHeight="25.0" prefWidth="64.0" text="clear" />
+            <TextField fx:id="Salarytf" layoutX="507.0" layoutY="620.0" prefHeight="25.0" prefWidth="174.0" />
+            <Label layoutX="436.0" layoutY="624.0" text="Lương :" />
+            <Label layoutX="403.0" layoutY="572.0" prefHeight="25.0" prefWidth="82.0" text="Năm làm viêc :" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="SubjectBox" layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0" visible="false">
+         <children>
+            <TableView fx:id="Tablesubject" layoutX="67.0" layoutY="138.0" prefHeight="356.0" prefWidth="255.0">
+              <columns>
+                <TableColumn fx:id="Subjectid_col" prefWidth="75.0" text="ID môn học" />
+                <TableColumn fx:id="Subjectname_col" prefWidth="179.0" text="Tên môn học" />
+              </columns>
+            </TableView>
+            <Button fx:id="AddsubjectBtn" layoutX="67.0" layoutY="527.0" mnemonicParsing="false" text="Thêm môn học" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0">
+         <children>
+            <Label layoutX="75.0" layoutY="58.0" prefHeight="17.0" prefWidth="59.0" text="Chọn lớp :" />
+            <ComboBox fx:id="Classname_mnc_box" layoutX="152.0" layoutY="54.0" prefHeight="25.0" prefWidth="91.0" />
+            <TableView fx:id="Tablesubjectclass_mnc" layoutX="75.0" layoutY="172.0" prefHeight="477.0" prefWidth="456.0">
+              <columns>
+                <TableColumn fx:id="Subjectid_mnc_col" prefWidth="75.0" text="ID môn học" />
+                <TableColumn fx:id="Subjectname_mnc_col" prefWidth="97.0" text="Tên môn học" />
+                  <TableColumn fx:id="teacherid_mnc_col" prefWidth="127.0" text="ID giáo viên dạy" />
+                  <TableColumn fx:id="teachername_mnc_col" prefWidth="156.0" text="Tên giáo viên dạy" />
+              </columns>
+            </TableView>
+            <TableView fx:id="Tablehomeroomteacher_mnc" layoutX="540.0" layoutY="172.0" prefHeight="75.0" prefWidth="287.0">
+              <columns>
+                <TableColumn fx:id="Idhomeroomteacher_mnc" prefWidth="140.0" text="ID giáo viên chủ nhiệm" />
+                <TableColumn fx:id="Namehomeroomteacher_mnc" prefWidth="146.0" text="Tên giáo viên" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

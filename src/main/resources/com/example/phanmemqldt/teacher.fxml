@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="900.0" prefWidth="1112.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.TeacherController">
+   <children>
+      <VBox fx:id="VBoxAdmin" prefHeight="900.0" prefWidth="347.0">
+         <children>
+            <AnchorPane fx:id="Slider" prefHeight="901.0" prefWidth="347.0" styleClass="slider">
+               <children>
+                  <Button fx:id="SubjectClassBtn" layoutY="278.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp bộ môn">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="INFO_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="HomeroomclassBtn" layoutY="364.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp chủ nhiệm">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="BOOK" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="LineChartBtn" layoutY="452.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Thống kê điểm">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="LINE_CHART" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <FontAwesomeIconView glyphName="USER" layoutX="125.0" layoutY="128.0" size="75" />
+                  <Label layoutX="109.0" layoutY="162.0" text="Xin Chào">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                  </Label>
+                  <Button fx:id="AccountBtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="USER_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+               </children>
+               <stylesheets>
+                  <URL value="@admin-form.css" />
+                  <URL value="@admin-form.css" />
+               </stylesheets>
+            </AnchorPane>
+         </children>
+      </VBox>
+      <AnchorPane layoutX="347.0" prefHeight="906.0" prefWidth="765.0" visible="false">
+         <children>
+            <Label layoutX="44.0" layoutY="106.0" prefHeight="17.0" prefWidth="42.0" text="Lớp :">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="ClassnameBox" layoutX="110.0" layoutY="107.0" prefHeight="25.0" prefWidth="105.0" />
+            <Label layoutX="272.0" layoutY="106.0" prefHeight="27.0" prefWidth="54.0" text="Môn :">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="SubjectnameBox" layoutX="349.0" layoutY="107.0" prefHeight="25.0" prefWidth="105.0" />
+            <TableView fx:id="TableGrade" layoutX="44.0" layoutY="191.0" prefHeight="610.0" prefWidth="553.0">
+              <columns>
+                <TableColumn fx:id="Studentidgrade_col" prefWidth="75.0" text="ID Học sinh" />
+                <TableColumn fx:id="Studentnamegrade_col" prefWidth="75.0" text="Tên" />
+              </columns>
+            </TableView>
+            <Label layoutX="478.0" layoutY="106.0" prefHeight="27.0" prefWidth="70.0" text="Kì học :">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="SemesterBox" layoutX="571.0" layoutY="107.0" prefHeight="25.0" prefWidth="105.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="347.0" prefHeight="906.0" prefWidth="765.0">
+         <children>
+            <ComboBox fx:id="NamehomeroomclassBox" layoutX="100.0" layoutY="70.0" prefHeight="25.0" prefWidth="91.0" />
+            <Label layoutX="50.0" layoutY="69.0" text="Lớp :">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TableView fx:id="Tablestudenthomeroominfor" layoutX="50.0" layoutY="153.0" prefHeight="200.0" prefWidth="647.0" />
+            <ComboBox fx:id="SubjectgradehomeroomclassBox" layoutX="100.0" layoutY="454.0" prefHeight="25.0" prefWidth="117.0" />
+            <Label layoutX="43.0" layoutY="454.0" text="Môn :">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <TableView fx:id="Tablegradestudenthomeroom" layoutX="46.0" layoutY="506.0" prefHeight="200.0" prefWidth="647.0">
+              <columns>
+                <TableColumn fx:id="Idstudentgradehomeroom_col" prefWidth="79.0" text="ID học sinh" />
+                  <TableColumn fx:id="Namestudentgradehomeroom_col" prefWidth="127.0" text="Tên" />
+              </columns>
+            </TableView>
+            <Label layoutX="441.0" layoutY="454.0" text="Học kỳ :">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Label>
+            <ComboBox fx:id="SemestergradehomeroomclassBox" layoutX="509.0" layoutY="454.0" prefHeight="25.0" prefWidth="117.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>

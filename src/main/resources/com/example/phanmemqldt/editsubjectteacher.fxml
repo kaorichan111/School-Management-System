@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+
+<AnchorPane prefHeight="688.0" prefWidth="871.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.EditsubjectteacherController">
+   <children>
+      <Label layoutX="108.0" layoutY="75.0" text="Danh sách giáo viên khả dụng">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <TableView fx:id="Tablesubjectteacher" layoutX="108.0" layoutY="189.0" prefHeight="389.0" prefWidth="341.0">
+        <columns>
+          <TableColumn fx:id="teacherid_col" prefWidth="75.0" text="ID" />
+          <TableColumn fx:id="teachername_col" prefWidth="119.0" text="Tên giáo viên" />
+            <TableColumn fx:id="subjectname_col" prefWidth="146.0" text="Môn giảng dạy" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

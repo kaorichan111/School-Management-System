@@ -1,0 +1,38 @@
+/* hello-view.css */
+.leftloginform
+{
+    -fx-background-color: #0598ff;
+
+}
+
+.closebtn:hover
+{
+    -fx-background-color: red;
+
+}
+.closebtn
+{
+    -fx-background-color: transparent;
+
+}
+
+.loginbtn
+{
+    -fx-background-color: #0598ff;
+}
+
+.usernametf:focused
+{
+    -fx-border-color: #0598ff;
+    -fx-border-width: 2px 2px 2px 2px;
+}
+
+.passwordtf:focused
+{
+    -fx-border-color: #0598ff;
+    -fx-border-width: 2px 2px 2px 2px;
+}
+
+.searchbtn {
+    -fx-padding:0px 0px 0px 28px;
+}
