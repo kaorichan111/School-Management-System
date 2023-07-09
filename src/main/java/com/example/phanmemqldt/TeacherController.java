@@ -569,7 +569,7 @@ public class TeacherController {
 
         studentid.setCellValueFactory(new PropertyValueFactory<>("studentid"));
         studentname.setCellValueFactory(new PropertyValueFactory<>("name"));
-        gender.setCellValueFactory(new PropertyValueFactory<>("studentid"));
+        gender.setCellValueFactory(new PropertyValueFactory<>("gender"));
         birthday.setCellValueFactory(new PropertyValueFactory<>("birthday"));
         address.setCellValueFactory(new PropertyValueFactory<>("address"));
         fathername.setCellValueFactory(new PropertyValueFactory<>("fathername"));
@@ -579,6 +579,53 @@ public class TeacherController {
         conduct.setCellValueFactory(new PropertyValueFactory<>("conduct"));
         absent.setCellValueFactory(new PropertyValueFactory<>("absent"));
         mytableview.getColumns().addAll(studentid, studentname, gender, birthday, address, fathername, mothername, fatherphone, motherphone, conduct, absent);
+
+    }
+
+    public void editStudentHomeRoomInfor(Student selectedstudent, String edit, String classname) {
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("editstudenthomeroominfor.fxml"));
+        Stage stage = new Stage();
+        try {
+            Parent root = fxmlLoader.load();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.setTitle("Sửa thông tin học sinh");
+            stage.initModality(Modality.APPLICATION_MODAL);
+            EditstudenthomeroominforController editstudenthomeroominforController = fxmlLoader.getController();
+            editstudenthomeroominforController.edit(selectedstudent, edit, classname);
+            stage.showAndWait();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        updateTableGrade();
+        updateTableInforStudentHomeRoom();
+        updateStudentGradeHomeRoom();
+    }
+
+    public void deleteStudentHomeRoom(Student selectedstudent) {
+
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "DELETE FROM students WHERE studentid = ?";
+                PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                preparedStatement.setString(1, selectedstudent.getStudentid());
+                int rowsInserted = preparedStatement.executeUpdate();
+                if (rowsInserted > 0) {
+                    System.out.println("Xóa học sinh thành công!");
+                    LoginController.showSuccessMessage("thành công", "Xóa học sinh thành công");
+                } else {
+                    System.out.println("Xóa học sinh thất bại!");
+                }
+                updateTableGrade();
+                updateTableInforStudentHomeRoom();
+                updateStudentGradeHomeRoom();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 
@@ -596,18 +643,26 @@ public class TeacherController {
 
             Tablestudenthomeroominfor.setContextMenu(contextMenu);
             editMenuItem.setOnAction(event -> {
-               Student selectedstudent = Tablestudenthomeroominfor.getSelectionModel().getSelectedItem();
+                Student selectedstudent = Tablestudenthomeroominfor.getSelectionModel().getSelectedItem();
+                if (selectedstudent != null) {
+                    String edit = "edit";
+                    editStudentHomeRoomInfor(selectedstudent, edit, NamehomeroomclassBox.getValue());
+                }
 
             });
 
             addMenuItem.setOnAction(event -> {
+                Student selectedstudent = Tablestudenthomeroominfor.getSelectionModel().getSelectedItem();
+                String edit = "add";
+                editStudentHomeRoomInfor(selectedstudent, edit, NamehomeroomclassBox.getValue());
 
             });
 
             deleteMenuItem.setOnAction(event -> {
-
-                }
-            );
+                Student selectedstudent = Tablestudenthomeroominfor.getSelectionModel().getSelectedItem();
+                if (selectedstudent != null)
+                    deleteStudentHomeRoom(selectedstudent);
+            });
 
 
         }

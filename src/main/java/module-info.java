@@ -10,11 +10,9 @@ module com.example.phanmemqldt {
     opens com.example.phanmemqldt.data to javafx.base;
 
 
-
-
-
     opens com.example.phanmemqldt to javafx.fxml;
 
     exports com.example.phanmemqldt;
+    exports com.example.phanmemqldt.data;
 }
 
