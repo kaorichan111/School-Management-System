@@ -13,11 +13,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="892.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.AdminController">
+<AnchorPane prefHeight="877.0" prefWidth="1228.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.AdminController">
    <children>
       <VBox fx:id="VBoxAdmin" layoutY="2.0" prefHeight="888.0" prefWidth="337.0">
          <children>
-            <AnchorPane fx:id="Slider" prefHeight="888.0" prefWidth="310.0" styleClass="slider">
+            <AnchorPane fx:id="Slider" prefHeight="910.0" prefWidth="342.0" styleClass="slider">
                <children>
                   <Button fx:id="TeacherInforBtn" layoutY="278.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý giáo viên">
                      <font>
@@ -49,7 +49,15 @@
                         <Font name="Arial" size="22.0" />
                      </font>
                   </Label>
-                  <Button fx:id="AccountBtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
+                  <Button fx:id="Fileexportbtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Xuất file">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="FILE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="AccountBtn" layoutY="640.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="342.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -107,7 +115,7 @@
             <Button fx:id="AddsubjectBtn" layoutX="67.0" layoutY="527.0" mnemonicParsing="false" text="Thêm môn học" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0">
+      <AnchorPane layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0" visible="false">
          <children>
             <Label layoutX="75.0" layoutY="58.0" prefHeight="17.0" prefWidth="59.0" text="Chọn lớp :" />
             <ComboBox fx:id="Classname_mnc_box" layoutX="152.0" layoutY="54.0" prefHeight="25.0" prefWidth="91.0" />
@@ -125,6 +133,13 @@
                 <TableColumn fx:id="Namehomeroomteacher_mnc" prefWidth="146.0" text="Tên giáo viên" />
               </columns>
             </TableView>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="342.0" layoutY="2.0" prefHeight="888.0" prefWidth="885.0">
+         <children>
+            <ComboBox fx:id="SemesterBox_exp" layoutX="135.0" layoutY="60.0" prefWidth="150.0" />
+            <Label layoutX="59.0" layoutY="64.0" text="Chọn học kỳ :" />
+            <Button fx:id="Exportbtn" layoutX="59.0" layoutY="127.0" mnemonicParsing="false" text="Xuất file" />
          </children>
       </AnchorPane>
    </children>

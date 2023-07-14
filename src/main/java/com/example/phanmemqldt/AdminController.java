@@ -14,7 +14,10 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.*;
 import javafx.util.converter.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.*;
 
+import java.io.*;
 import java.sql.*;
 import java.text.*;
 import java.util.*;
@@ -124,6 +127,37 @@ public class AdminController {
     private TableColumn<Class, String> Namehomeroomteacher_mnc;
     @FXML
     private TableView<Class> Tablehomeroomteacher_mnc;
+
+    //Xuất file
+
+    @FXML
+    private Button Exportbtn;
+
+    @FXML
+    private Button Fileexportbtn;
+    @FXML
+    private ComboBox<String> SemesterBox_exp;
+
+    public void setSemesterBox() {
+        ObservableList<String> filteredList = FXCollections.observableArrayList();
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "SELECT semesterid FROM semesters ";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
+                while (rs.next()) {
+                    filteredList.add(rs.getString(1));
+                }
+                SemesterBox_exp.setItems(filteredList);
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+
+    }
 
     public void getClassName() {
         Connection connection = database.connectDb();
@@ -755,6 +789,202 @@ public class AdminController {
         });
     }
 
+    public ArrayList<Class> getArrayClass() {
+        ArrayList<Class> filteredList = new ArrayList<>();
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "SELECT classid, classname FROM classes ";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
+                while (rs.next()) {
+                    Class c = new Class();
+                    c.setClassid(rs.getString(1));
+                    c.setClassname(rs.getString(2));
+                    filteredList.add(c);
+                }
+
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return filteredList;
+
+    }
+
+    public void exportStudentInfor(ObservableList<Student> studenthomeroominforlist, String classname, String directoryPath, String semesterid) {
+        String classdirectory = directoryPath + "/" + semesterid + "/" + classname;
+        File directory = new File(classdirectory);
+        boolean created = directory.mkdirs();
+        if (created) {
+            System.out.println("Directory created successfully: " + directory.getAbsolutePath());
+        } else {
+            System.out.println("Failed to create directory: " + directory.getAbsolutePath());
+        }
+
+        String outputfile = directoryPath + "/" + semesterid + "/" + classname + "/" + classname + ".xlsx";
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Students");
+
+        // Tạo dòng tiêu đề
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Tên");
+        headerRow.createCell(2).setCellValue("Giới tính");
+        headerRow.createCell(3).setCellValue("Ngày sinh");
+        headerRow.createCell(4).setCellValue("Địa chỉ");
+        headerRow.createCell(5).setCellValue("Tên bố");
+        headerRow.createCell(6).setCellValue("Tên mẹ");
+        headerRow.createCell(7).setCellValue("SDT bố");
+        headerRow.createCell(8).setCellValue("SDT mẹ");
+        headerRow.createCell(9).setCellValue("Hạnh kiểm");
+        headerRow.createCell(10).setCellValue("Số buổi vắng");
+
+        // Lặp qua danh sách sinh viên và thêm dữ liệu vào các dòng
+        for (int i = 0; i < studenthomeroominforlist.size(); i++) {
+            Student student = studenthomeroominforlist.get(i);
+            Row dataRow = sheet.createRow(i + 1);
+            dataRow.createCell(0).setCellValue(student.getStudentid());
+            dataRow.createCell(1).setCellValue(student.getName());
+            dataRow.createCell(2).setCellValue(student.getGender());
+            dataRow.createCell(3).setCellValue(student.getBirthday());
+            dataRow.createCell(4).setCellValue(student.getAddress());
+            dataRow.createCell(5).setCellValue(student.getFathername());
+            dataRow.createCell(6).setCellValue(student.getMothername());
+            dataRow.createCell(7).setCellValue(student.getFatherphone());
+            dataRow.createCell(8).setCellValue(student.getMotherphone());
+            dataRow.createCell(9).setCellValue(student.getConduct());
+            dataRow.createCell(10).setCellValue(student.getAbsent());
+
+        }
+
+        // Đặt chiều rộng cột tùy chỉnh
+        sheet.setColumnWidth(0, 3000); // Cột ID
+        sheet.setColumnWidth(1, 5000); // Cột Name
+        sheet.setColumnWidth(2, 3000); // Cột Grade
+
+        try (FileOutputStream outputStream = new FileOutputStream(outputfile)) {
+            workbook.write(outputStream);
+            System.out.println("Data exported to " + outputfile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ArrayList<Subject> getSubjectArray() {
+        ArrayList<Subject> filteredList = new ArrayList<>();
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "SELECT * FROM subjects ";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
+                while (rs.next()) {
+                    Subject sj = new Subject();
+                    sj.setSubjectid(rs.getInt(1));
+                    sj.setSubjectname(rs.getString(2));
+                    sj.setIsspecial(rs.getString(3));
+                    filteredList.add(sj);
+                }
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return filteredList;
+    }
+
+    public void exportSubjectGrade(Subject sj, Class c, String gradedirectory) {
+        String outputfile = gradedirectory + "/" + sj.getSubjectname() + ".xlsx";
+        TeacherController teacherController = new TeacherController();
+        Teachersubjectclasses tsc = new Teachersubjectclasses();
+        tsc.setClassid(c.getClassid());
+        tsc.setClassname(c.getClassname());
+        ObservableList<Student> studentGradeList = teacherController.getStudentGradeList(tsc, sj, SemesterBox_exp);
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Students");
+
+        // Tạo dòng tiêu đề
+        Row headerRow = sheet.createRow(0);
+        headerRow.createCell(0).setCellValue("ID");
+        headerRow.createCell(1).setCellValue("Tên");
+        for (int i = 0; i < studentGradeList.get(0).getStudentsubject().getGrades().size(); i++) {
+            headerRow.createCell(i + 2).setCellValue(studentGradeList.get(0).getStudentsubject().getGrades().get(i).getGradetypename());
+        }
+
+        // Lặp qua danh sách sinh viên và thêm dữ liệu vào các dòng
+        for (int i = 0; i < studentGradeList.size(); i++) {
+            Student student = studentGradeList.get(i);
+            Row dataRow = sheet.createRow(i + 1);
+            dataRow.createCell(0).setCellValue(student.getStudentid());
+            dataRow.createCell(1).setCellValue(student.getName());
+            for (int j = 0; j < student.getStudentsubject().getGrades().size(); j++) {
+                dataRow.createCell(j + 2).setCellValue(student.getStudentsubject().getGrades().get(j).getGradestring());
+            }
+
+        }
+
+        // Đặt chiều rộng cột tùy chỉnh
+        sheet.setColumnWidth(0, 3000); // Cột ID
+        sheet.setColumnWidth(1, 5000); // Cột Name
+        sheet.setColumnWidth(2, 3000); // Cột Grade
+
+        try (FileOutputStream outputStream = new FileOutputStream(outputfile)) {
+            workbook.write(outputStream);
+            System.out.println("Data exported to " + outputfile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public void exportStudentGrade(Class c, String directorypath, String semesterid) {
+        String gradedirectory = directorypath + "/" + semesterid + "/" + c.getClassname() + "/" + "grades";
+        File directory = new File(gradedirectory);
+        boolean created = directory.mkdirs();
+        ArrayList<Subject> subjects = getSubjectArray();
+        for (Subject sj : subjects)
+            exportSubjectGrade(sj, c, gradedirectory);
+
+
+    }
+
+    public void exportToExcelFile(String semesterid) {
+        String directoryPath = "output";
+
+        File directory = new File(directoryPath);
+
+        if (!directory.exists()) {
+            boolean created = directory.mkdirs();
+            if (created) {
+                System.out.println("Directory created successfully: " + directory.getAbsolutePath());
+            } else {
+                System.out.println("Failed to create directory: " + directory.getAbsolutePath());
+            }
+        } else {
+            System.out.println("Directory already exists: " + directory.getAbsolutePath());
+        }
+
+        TeacherController teacherController = new TeacherController();
+        ArrayList<Class> classes = getArrayClass();
+        for (Class c : classes) {
+            ObservableList<Student> studentshomeroominforlist = teacherController.getStudentHomeRoomList(c.getClassname());
+            exportStudentInfor(studentshomeroominforlist, c.getClassname(), directoryPath, semesterid);
+            exportStudentGrade(c, directoryPath, semesterid);
+        }
+    }
+
+    public void export() {
+        setSemesterBox();
+        Exportbtn.setOnAction(event -> {
+            if (SemesterBox_exp.getValue() != null) {
+                String semesterid = SemesterBox_exp.getValue();
+                exportToExcelFile(semesterid);
+            }
+        });
+    }
+
     public void initTable() {
         GenderBox.getItems().addAll("Nam", "Nữ");
         GenderBox.setValue("Nam");
@@ -770,6 +1000,7 @@ public class AdminController {
         updateTableTeacher();
         updateTableSubject();
         updateTableSubjectClass();
+        export();
     }
 
 

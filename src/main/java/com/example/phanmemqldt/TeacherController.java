@@ -4,6 +4,7 @@ import com.example.phanmemqldt.data.*;
 import com.example.phanmemqldt.data.Class;
 import javafx.beans.property.*;
 import javafx.collections.*;
+import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -11,14 +12,21 @@ import javafx.scene.control.cell.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import java.io.*;
 import java.sql.*;
+import java.time.*;
 import java.util.*;
 
 public class TeacherController {
 
     @FXML
     private Button AccountBtn;
+    @FXML
+    private Button Excelbtn;
 
     @FXML
     private Button HomeroomclassBtn;
@@ -67,6 +75,102 @@ public class TeacherController {
     private ComboBox<String> SemestergradehomeroomclassBox;
     @FXML
     private TableView<Student> Tablestudenthomeroominfor;
+
+    public void importDataFromExcel(File file, ComboBox<String> classname) {
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                Teachersubjectclasses ts = getTeacherSubjectClassesFromClassname(classname.getValue());
+                FileInputStream fileInputStream = new FileInputStream(file);
+                Workbook workbook = new XSSFWorkbook(fileInputStream);
+                Sheet sheet = workbook.getSheetAt(0);
+
+                Iterator<Row> rowIterator = sheet.iterator();
+                rowIterator.next(); // Skip the header row
+                DataFormatter dataFormatter = new DataFormatter();
+
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    for (int i = 0; i < 1; i++) {
+                        Cell idCell = row.getCell(i);
+
+                        System.out.println(idCell.getCellType() + " " + idCell.getNumericCellValue());
+                    }
+
+//                    System.out.println("hết 1 hàng");
+                    String studentid = String.valueOf((int) row.getCell(0).getNumericCellValue());
+                    String studentname = row.getCell(1).getStringCellValue();
+                    String gender = row.getCell(2).getStringCellValue();
+                    LocalDate birthday = row.getCell(3).getLocalDateTimeCellValue().toLocalDate();
+                    String address = row.getCell(4).getStringCellValue();
+                    String fathername = row.getCell(5).getStringCellValue();
+                    String mothername = row.getCell(6).getStringCellValue();
+                    String fatherphone = String.valueOf((long) row.getCell(7).getNumericCellValue());
+                    String motherphone = String.valueOf((long) row.getCell(8).getNumericCellValue());
+                    String conduct = row.getCell(9).getStringCellValue();
+                    int absent = (int) row.getCell(10).getNumericCellValue();
+
+                    // Get other cell values as needed
+
+                    String sql = "INSERT INTO students(studentid, studentname, gender, birthday, address, classid, fathername, mothername, fatherphonenumber, motherphonenumber, conduct, absent) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
+                    PreparedStatement preparedStatement = connection.prepareStatement(sql);
+                    preparedStatement.setString(1, studentid);
+                    preparedStatement.setString(2, studentname);
+                    preparedStatement.setString(3, gender);
+                    preparedStatement.setString(4, birthday.toString());
+                    preparedStatement.setString(5, address);
+                    preparedStatement.setString(6, ts.getClassid());
+                    preparedStatement.setString(7, fathername);
+                    preparedStatement.setString(8, mothername);
+                    preparedStatement.setString(9, fatherphone);
+                    preparedStatement.setString(10, motherphone);
+                    preparedStatement.setString(11, conduct);
+                    preparedStatement.setInt(12, absent);
+                    int rowsInserted = preparedStatement.executeUpdate();
+                    if (rowsInserted > 0) {
+                        System.out.println("Thêm học sinh thành công!");
+                        LoginController.showSuccessMessage("thành công", "Thêm thông tin học sinh thành công!");
+                    } else {
+                        System.out.println("Thêm thông tin học sinh thất bại!");
+                    }
+                    // Set other parameters for the statement if needed
+                    preparedStatement.close();
+                }
+
+                workbook.close();
+                fileInputStream.close();
+                LoginController.showSuccessMessage("thành công", "Thêm thông tin từ file excel thành công");
+                updateTableInforStudentHomeRoom();
+                updateStudentGradeHomeRoom();
+
+                System.out.println("Data imported successfully!");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void importFromExcel(ActionEvent event, ComboBox<String> classname) {
+        FileChooser fileChooser = new FileChooser();
+        Stage primaryStage = (Stage) Excelbtn.getScene().getWindow();
+
+        // Đặt tiêu đề cho hộp thoại chọn file
+        fileChooser.setTitle("Chọn File");
+
+        // Hiển thị hộp thoại chọn file và lấy file đã chọn
+        File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+        // Kiểm tra xem người dùng đã chọn file hay chưa
+        if (selectedFile != null) {
+            if (classname.getValue() != null) {
+                importDataFromExcel(selectedFile, classname);
+            }
+        } else {
+            System.out.println("Không có file nào được chọn");
+        }
+    }
+
 
     public void setSemesterBox() {
         ObservableList<String> filteredList = FXCollections.observableArrayList();
@@ -291,7 +395,7 @@ public class TeacherController {
         Connection connection = database.connectDb();
         if (connection != null) {
             try {
-                String sql = "SELECT studentid, studentname FROM remakektpm.students \n" +
+                String sql = "SELECT studentid, studentname FROM students \n" +
                         "JOIN Classes C ON students.classid = C.classid\n" +
                         "WHERE C.classname = " + "'" + tsc.getClassname() + "'";
                 System.out.println(sql);
@@ -517,7 +621,7 @@ public class TeacherController {
         Connection connection = database.connectDb();
         if (connection != null) {
             try {
-                String sql = "SELECT students.* FROM remakektpm.students \n" +
+                String sql = "SELECT students.* FROM students \n" +
                         "JOIN Classes C ON students.classid = C.classid\n" +
                         "WHERE C.classname = " + "'" + classname + "'";
                 System.out.println(sql);
@@ -703,6 +807,9 @@ public class TeacherController {
                 updateStudentGradeHomeRoom();
             });
 
+            Excelbtn.setOnAction(event -> {
+                importFromExcel(event, NamehomeroomclassBox);
+            });
         }
 
 
