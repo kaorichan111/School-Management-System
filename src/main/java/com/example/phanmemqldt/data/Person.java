@@ -72,6 +72,24 @@ public class Person {
         this.gender = gender;
     }
 
+    public static String normalizeName(String name) {
+        // Xóa dấu cách thừa và trim ở đầu và cuối chuỗi
+        String trimmedName = name.trim();
+        String[] words = trimmedName.split("\\s+");
+
+        StringBuilder result = new StringBuilder();
+        for (String word : words) {
+            if (!word.isEmpty()) {
+                // Viết hoa chữ cái đầu và viết thường các chữ cái sau
+                String normalizedWord = Character.toUpperCase(word.charAt(0)) + word.substring(1).toLowerCase();
+                result.append(normalizedWord).append(" "); // Thêm dấu cách sau mỗi từ
+            }
+        }
+
+        // Xóa dấu cách cuối cùng và trả về kết quả
+        return result.toString().trim();
+    }
+
     @Override
     public String toString() {
         return "Person{" +

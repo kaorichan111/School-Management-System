@@ -7,17 +7,21 @@ import javafx.collections.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.scene.*;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.*;
+import org.apache.poi.ss.formula.functions.*;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.*;
 import java.sql.*;
+import java.text.*;
 import java.time.*;
 import java.util.*;
 
@@ -36,6 +40,15 @@ public class TeacherController {
 
     @FXML
     private AnchorPane Slider;
+    @FXML
+    private AnchorPane Subjectclass_form;
+    @FXML
+    private AnchorPane Homeroomclass_form;
+    @FXML
+    private AnchorPane Analysis_form;
+    @FXML
+    private AnchorPane Account_form;
+
 
     @FXML
     private Button SubjectClassBtn;
@@ -75,6 +88,110 @@ public class TeacherController {
     private ComboBox<String> SemestergradehomeroomclassBox;
     @FXML
     private TableView<Student> Tablestudenthomeroominfor;
+
+    //thống kê điểm
+    @FXML
+    private LineChart<?, ?> Linechartgrade;
+    @FXML
+    private ComboBox<String> classname_ana;
+    @FXML
+    private ComboBox<String> gradetype_ana;
+
+    @FXML
+    private ComboBox<String> semesterbox_ana;
+
+    @FXML
+    private ComboBox<String> subjectname_ana;
+    @FXML
+    private CategoryAxis xaxis;
+
+    @FXML
+    private NumberAxis yaxis;
+
+    //Account
+
+    @FXML
+    private Button ChangepassBtn;
+    @FXML
+    private Label Newpass_lb;
+
+    @FXML
+    private PasswordField Newpasstf;
+    @FXML
+    private Label Oldpasslb;
+    @FXML
+    private PasswordField Oldpasstf;
+    @FXML
+    private Button SavenewpassBtn;
+
+    @FXML
+    private TextField Usernametf_acc;
+
+    //logour
+    @FXML
+    private Button Logoutbtn;
+    private double x, y, x1, y1;
+
+
+    public void clear() {
+        ClassnameBox.setValue(null);
+        SubjectnameBox.setItems(null);
+        SemesterBox.setValue(null);
+        TableGrade.getColumns().subList(2, TableGrade.getColumns().size()).clear();
+        TableGrade.getItems().clear();
+
+        NamehomeroomclassBox.setValue(null);
+        Tablestudenthomeroominfor.getColumns().clear();
+        SubjectgradehomeroomclassBox.setValue(null);
+        SemestergradehomeroomclassBox.setValue(null);
+        Tablegradestudenthomeroom.getColumns().subList(2, TableGrade.getColumns().size()).clear();
+        TableGrade.getItems().clear();
+
+        classname_ana.setValue(null);
+        subjectname_ana.setItems(null);
+        semesterbox_ana.setValue(null);
+        gradetype_ana.setValue(null);
+        Linechartgrade.getData().clear();
+
+        Oldpasslb.setVisible(false);
+        Oldpasstf.setVisible(false);
+        Newpasstf.setVisible(false);
+        Newpass_lb.setVisible(false);
+        SavenewpassBtn.setVisible(false);
+        Oldpasstf.clear();
+        Newpasstf.clear();
+
+
+    }
+
+    public void swithForm(ActionEvent event) {
+        if (event.getSource() == SubjectClassBtn) {
+            clear();
+            Subjectclass_form.setVisible(true);
+            Homeroomclass_form.setVisible(false);
+            Analysis_form.setVisible(false);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == HomeroomclassBtn) {
+            clear();
+            Subjectclass_form.setVisible(false);
+            Homeroomclass_form.setVisible(true);
+            Analysis_form.setVisible(false);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == LineChartBtn) {
+            clear();
+            Subjectclass_form.setVisible(false);
+            Homeroomclass_form.setVisible(false);
+            Analysis_form.setVisible(true);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == AccountBtn) {
+            clear();
+            Subjectclass_form.setVisible(false);
+            Homeroomclass_form.setVisible(false);
+            Analysis_form.setVisible(false);
+            Account_form.setVisible(true);
+        }
+
+    }
 
     public void importDataFromExcel(File file, ComboBox<String> classname) {
         Connection connection = database.connectDb();
@@ -185,6 +302,7 @@ public class TeacherController {
                 }
                 SemesterBox.setItems(filteredList);
                 SemestergradehomeroomclassBox.setItems(filteredList);
+                semesterbox_ana.setItems(filteredList);
                 connection.close();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -211,6 +329,7 @@ public class TeacherController {
                     teacher.setAddress(rs.getString(5));
                     teacher.setWorkYear(rs.getInt(6));
                     teacher.setPassword(rs.getString(9));
+                    teacher.setUserName(rs.getString(8));
                 }
                 //Lấy ra các lớp gv này chủ nhiệm
                 connection.close();
@@ -221,6 +340,7 @@ public class TeacherController {
     }
 
     public void getTeacherHomeRoom() {
+        ObservableList<String> filterlist = FXCollections.observableArrayList();
         Connection connection = database.connectDb();
         if (connection != null) {
             //Lấy ra các lớp gv này chủ nhiệm
@@ -235,9 +355,10 @@ public class TeacherController {
                     c.setClassid(rs.getString(1));
                     c.setClassname(rs.getString(2));
                     teacher.getHomeroomclass().add(c);
-                    NamehomeroomclassBox.getItems().add(c.getClassname());
+                    filterlist.add(c.getClassname());
                     System.out.println("Lớp chủ nhiêm : " + c.getClassname());
                 }
+                NamehomeroomclassBox.setItems(filterlist);
                 connection.close();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -319,6 +440,7 @@ public class TeacherController {
             filteredList.add(sj.getSubjectname());
         }
         SubjectnameBox.setItems(filteredList);
+        subjectname_ana.setItems(filteredList);
     }
 
     public void setClassnameBox() {
@@ -327,6 +449,7 @@ public class TeacherController {
             filteredList.add(ts.getClassname());
         }
         ClassnameBox.setItems(filteredList);
+        classname_ana.setItems(filteredList);
     }
 
     public ArrayList<Gradetype> getGradeType(String isspecial) {
@@ -381,7 +504,7 @@ public class TeacherController {
                     else
                         grade.setSpecialvalue(rs.getString(11));
                     g.getValues().add(grade);
-                    System.out.println("Loại điểm : " + g.getGradetypename() + " giá trị : " + grade.getValues());
+                    //System.out.println("Loại điểm : " + g.getGradetypename() + " giá trị : " + grade.getValues());
                 }
                 connection.close();
             } catch (Exception e) {
@@ -412,8 +535,12 @@ public class TeacherController {
                     for (Gradetype g : st.getStudentsubject().getGrades()) {
                         updateGradeType(g, st.getStudentid(), s.getSubjectid(), s.getIsspecial(), mysemesterbox);
                         g.setGradestring();
-                        System.out.println(g.getGradestring());
+                        g.setSumGrade();
+                        // System.out.println("Tổng điểm " + g.getSumGrade());
+                        //System.out.println(g.getGradestring());
                     }
+                    st.getStudentsubject().setFinalgrade();
+                    // System.out.println("Điểm tổng kết :" + st.getStudentsubject().getFinalgrade());
                     filteredList.add(st);
                 }
                 connection.close();
@@ -447,6 +574,17 @@ public class TeacherController {
                 }
             });
             mytableview.getColumns().add(gradeColumn);
+        }
+        if (isspecial.equals("false")) {
+            TableColumn<Student, String> finalgradeColumn = new TableColumn<>("Điểm tổng kết");
+            finalgradeColumn.setCellValueFactory(data -> {
+                Student student = data.getValue();
+                Subject sj = student.getStudentsubject();
+                Double finalgrade = sj.getFinalgrade();
+                return new SimpleStringProperty(String.valueOf(finalgrade));
+
+            });
+            mytableview.getColumns().add(finalgradeColumn);
         }
     }
 
@@ -734,7 +872,7 @@ public class TeacherController {
     }
 
     public void updateTableInforStudentHomeRoom() {
-        if (!NamehomeroomclassBox.getValue().isEmpty()) {
+        if (NamehomeroomclassBox.getValue() != null) {
             Tablestudenthomeroominfor.getColumns().clear();
             addColumnTableInforStudentHomeRoom(Tablestudenthomeroominfor);
             Tablestudenthomeroominfor.setItems(getStudentHomeRoomList(NamehomeroomclassBox.getValue()));
@@ -772,6 +910,215 @@ public class TeacherController {
         }
     }
 
+    public void setGradetypename() {
+        ObservableList<String> filteredList = FXCollections.observableArrayList();
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "SELECT gradetypename FROM gradetypes WHERE gradetypevalue = 'số'";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
+                while (rs.next()) {
+                    filteredList.add(rs.getString(1));
+                }
+                gradetype_ana.setItems(filteredList);
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public ArrayList<Double> getGradeArray(String classname, String subjectname, String semesterid, String gradetypename) {
+        ArrayList<Double> filteredList = new ArrayList<Double>();
+        Connection connection = database.connectDb();
+        if (connection != null) {
+            try {
+                String sql = "SELECT  G.gradeid ,S.studentid,SS.semesterid,S.studentname,Sub.subjectid, Sub.subjectname, Sub.special, GT.gradetypename, classes.classid,classes.classname,G.gradevalue\n" +
+                        "FROM grades G\n" +
+                        "JOIN gradetypes GT ON G.gradetypeid = GT.gradetypeid\n" +
+                        "JOIN students S ON G.studentid = S.studentid\n" +
+                        "JOIN subjects Sub ON G.subjectid = Sub.subjectid\n" +
+                        "JOIN classes ON S.classid = classes.classid\n" +
+                        "JOIN semesters SS ON SS.semesterid = G.semesterid\n" +
+                        "WHERE  Sub.subjectname = '" + subjectname + "' AND GT.gradetypename = '" + gradetypename + "' AND SS.semesterid =" + semesterid + " AND classes.classname = '" + classname + "'  order by S.studentid ;";
+                Statement statement = connection.createStatement();
+                ResultSet rs = statement.executeQuery(sql);
+                while (rs.next()) {
+                    System.out.println(rs.getString(11));
+                    filteredList.add(rs.getDouble(11));
+                }
+                connection.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return filteredList;
+    }
+
+    private int countOccurrences(ArrayList<Double> numbers, double x) {
+        int count = 0;
+        for (double number : numbers) {
+            if (number == x) {
+                count++;
+            }
+        }
+        System.out.println("Số lượng điểm " + x + " là :" + count);
+        return count;
+    }
+
+
+    public void setLineChart(LineChart<Number, Number> mylinechart, ArrayList<Double> grades) {
+        // Tạo các trục
+
+
+        // Tạo đồ thị LineChart
+        //mylinechart = new LineChart<>(xAxis, yAxis);
+        mylinechart.setTitle("Biểu đồ điểm");
+
+        // Tạo dữ liệu cho đồ thị
+        XYChart.Series<Number, Number> series = new XYChart.Series<>();
+        series.setName("Số lượng");
+
+        for (double x = 0; x <= 10; x += 0.5) {
+            int count = countOccurrences(grades, x);
+            series.getData().add(new XYChart.Data<>(x, count));
+        }
+
+        // Thêm dữ liệu vào đồ thị
+        mylinechart.getData().add(series);
+    }
+
+    public ObservableList<String> getXaxis() {
+        ObservableList<String> filteredList = FXCollections.observableArrayList();
+        for (double x = 0; x <= 10; x += 0.5) {
+            filteredList.add(String.valueOf(x));
+        }
+        return filteredList;
+    }
+
+    public void updateLineChart() {
+        String classname = classname_ana.getValue();
+        Subject sj = getSubjecFromSubjectName(subjectname_ana.getValue());
+        String semesterid = semesterbox_ana.getValue();
+        String gradetypename = gradetype_ana.getValue();
+        if (classname != null && sj != null && semesterid != null && gradetypename != null && subjectname_ana.getValue() != null) {
+            if (sj.getIsspecial().equals("false")) {
+                Linechartgrade.getData().clear();
+                ArrayList<Double> grades = getGradeArray(classname, sj.getSubjectname(), semesterid, gradetypename);
+//                NumberAxis xAxis = new NumberAxis(0, 20, 1);
+//                NumberAxis yAxis = new NumberAxis(0, 1000, 50);
+//                xAxis.setLabel("Điểm");
+////                yAxis.setLabel("Số lượng");
+//                Linechartgrade = new LineChart<>(xAxis, yAxis);
+                Linechartgrade.setTitle("Biểu đồ điểm");
+                xaxis.setCategories(getXaxis());
+                yaxis.hashCode();
+                // Tạo dữ liệu cho đồ thị
+                XYChart.Series series = new XYChart.Series<>();
+                //  series.setName("Số lượng");
+                //   series.getData().add(new XYChart.Data("5", 123));
+                // series.getData().add(new XYChart.Data("10", 345));
+                // Linechartgrade.getData().add(series);
+                for (double x = 0; x <= 10; x += 0.5) {
+                    int count = countOccurrences(grades, x);
+//                    if (count != 0)
+                    series.getData().add(new XYChart.Data<>(String.valueOf(x), count));
+                }
+
+                // Thêm dữ liệu vào đồ thị
+                Linechartgrade.getData().add(series);
+            } else
+                Linechartgrade.getData().clear();
+        } else
+            Linechartgrade.getData().clear();
+
+    }
+
+    public void showSavePassWord() {
+        Oldpasslb.setVisible(true);
+        Oldpasstf.setVisible(true);
+        Newpasstf.setVisible(true);
+        Newpass_lb.setVisible(true);
+        SavenewpassBtn.setVisible(true);
+    }
+
+    public void saveNewPassWord(Teacher teacher) {
+
+        Connection connection = database.connectDb();
+        if (Oldpasstf.getText().isEmpty() || Newpasstf.getText().isEmpty())
+            LoginController.showErrorMessage("Lỗi", "Vui lòng nhập đầy đủ thông tin");
+        else {
+            if (connection != null) {
+                try {
+                    String sql = "SELECT * FROM teachers WHERE username = '" + teacher.getUserName() + "' AND PASSWORD = '" + Oldpasstf.getText() + "'";
+                    Statement statement = connection.createStatement();
+                    ResultSet rs = statement.executeQuery(sql);
+                    if (rs.next()) {
+                        String sql1 = "UPDATE teachers SET password = '" + Newpasstf.getText() + "' WHERE username = '" + teacher.getUserName() + "'";
+                        Statement statement1 = connection.createStatement();
+                        int rowsInserted = statement1.executeUpdate(sql1);
+                        if (rowsInserted > 0) {
+                            System.out.println("Đổi mật khẩu thành công!");
+                            LoginController.showSuccessMessage("thành công", "Đổi mật khẩu thành công!");
+                            Oldpasslb.setVisible(false);
+                            Oldpasstf.setVisible(false);
+                            Newpasstf.setVisible(false);
+                            Newpass_lb.setVisible(false);
+                            SavenewpassBtn.setVisible(false);
+                            Oldpasstf.clear();
+                            Newpasstf.clear();
+                        } else {
+                            System.out.println("Đổi mật khẩu thất bại!");
+                        }
+
+                    } else
+                        LoginController.showErrorMessage("Lỗi", "Sai mật khẩu cũ");
+
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public void logout(Button Logoutbtn) {
+        LoginController.showSuccessMessage("Thành công", "Đăng xuất thành công!");
+        Stage stage = (Stage) Logoutbtn.getScene().getWindow();
+        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-form.fxml"));
+        try {
+            Parent root = fxmlLoader.load();
+            Stage stage1 = new Stage();
+            Scene scene = new Scene(root);
+            root.setOnMousePressed((MouseEvent event) -> {
+                x = event.getSceneX();
+                y = event.getSceneY();
+                x1 = event.getScreenX();
+                y1 = event.getScreenY();
+                System.out.println(x + " " + y + " " + x1 + " " + y1);
+            });
+
+            root.setOnMouseDragged((MouseEvent event) -> {
+                stage1.setX(event.getScreenX() - x);
+                stage1.setY(event.getScreenY() - y);
+            });
+
+//
+//        else
+//            System.out.println("fail to connect database");
+            stage1.initStyle(StageStyle.TRANSPARENT);
+            stage1.setTitle("Hệ thống quản lý trường thcs");
+            stage1.setScene(scene);
+            stage1.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     public void initTable(String username) {
         getTeacherInfor(username);
         getTeacherHomeRoom();
@@ -780,6 +1127,7 @@ public class TeacherController {
         if (!teacher.getTeachersubjectclasses().isEmpty()) {
             setSemesterBox();
             setClassnameBox();
+            setGradetypename();
             ClassnameBox.setOnAction(event -> {
                 updateSubjectNameBox(ClassnameBox.getValue());
                 updateTableGrade();
@@ -791,6 +1139,22 @@ public class TeacherController {
             SemesterBox.setOnAction(event -> {
                 updateTableGrade();
             });
+            classname_ana.setOnAction(event -> {
+                updateSubjectNameBox(classname_ana.getValue());
+                updateLineChart();
+            });
+            subjectname_ana.setOnAction(event -> {
+                updateLineChart();
+            });
+            semesterbox_ana.setOnAction(event -> {
+                updateSubjectNameBox(classname_ana.getValue());
+                updateLineChart();
+            });
+            gradetype_ana.setOnAction(event -> {
+                updateLineChart();
+            });
+
+
         }
         if (!teacher.getHomeroomclass().isEmpty()) {
             setSubjectgradehomeroomclassBox();
@@ -812,7 +1176,18 @@ public class TeacherController {
             });
         }
 
+        Usernametf_acc.setText(teacher.getUserName());
+        ChangepassBtn.setOnAction(event -> {
+            showSavePassWord();
+        });
 
+        SavenewpassBtn.setOnAction(event -> {
+            saveNewPassWord(teacher);
+        });
+
+        Logoutbtn.setOnAction(event -> {
+            logout(Logoutbtn);
+        });
     }
 
 }

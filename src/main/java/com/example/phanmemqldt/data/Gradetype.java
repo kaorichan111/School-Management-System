@@ -11,6 +11,21 @@ public class Gradetype {
     private ArrayList<Grade> values = new ArrayList<>();
 
     private String gradestring;
+    private Double sumGrade = 0.0;
+
+    public void setSumGrade() {
+        if (this.gradetypevalue.equals("số")) {
+            for (Grade g : this.values) {
+                sumGrade += g.getValues();
+            }
+            if (!this.values.isEmpty())
+                sumGrade /= this.values.size();
+        }
+    }
+
+    public Double getSumGrade() {
+        return sumGrade;
+    }
 
     public void setGradestring() {
         if (!this.getValues().isEmpty()) {

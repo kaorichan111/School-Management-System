@@ -34,10 +34,21 @@ public class AdminController {
     private Button ClassmanageBtn;
 
     @FXML
-    private Button LogoutBtn;
+    private Button Logoutbtn;
 
     @FXML
     private AnchorPane Slider;
+    @FXML
+    private AnchorPane TeacherinforBlock;
+    @FXML
+    private AnchorPane SubjectBox;
+    @FXML
+    private AnchorPane Teachersubjectclass_box;
+    @FXML
+    private AnchorPane Exportbox;
+    @FXML
+    private AnchorPane Account_form;
+
 
     @FXML
     private Button SubjectmanageBtn;
@@ -137,6 +148,86 @@ public class AdminController {
     private Button Fileexportbtn;
     @FXML
     private ComboBox<String> SemesterBox_exp;
+
+    // đổi mk
+    @FXML
+    private Button ChangepassBtn;
+    @FXML
+    private Label Newpass_lb;
+
+    @FXML
+    private PasswordField Newpasstf;
+    @FXML
+    private Label Oldpasslb;
+    @FXML
+    private PasswordField Oldpasstf;
+    @FXML
+    private Button SavenewpassBtn;
+
+    @FXML
+    private TextField Usernametf_acc;
+
+    private double x, y, x1, y1;
+
+
+    public void clearall() {
+        SearchBtn1.clear();
+        clear();
+
+        Classname_mnc_box.setValue(null);
+        Tablesubjectclass_mnc.getItems().clear();
+        Tablehomeroomteacher_mnc.getItems().clear();
+
+        SemesterBox_exp.setValue(null);
+
+        Oldpasslb.setVisible(false);
+        Oldpasstf.setVisible(false);
+        Newpasstf.setVisible(false);
+        Newpass_lb.setVisible(false);
+        SavenewpassBtn.setVisible(false);
+        Oldpasstf.clear();
+        Newpasstf.clear();
+    }
+
+    public void switchForm(ActionEvent event) {
+        if (event.getSource() == TeacherInforBtn) {
+            clearall();
+            TeacherinforBlock.setVisible(true);
+            SubjectBox.setVisible(false);
+            Teachersubjectclass_box.setVisible(false);
+            Exportbox.setVisible(false);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == SubjectmanageBtn) {
+            clearall();
+            TeacherinforBlock.setVisible(false);
+            SubjectBox.setVisible(true);
+            Teachersubjectclass_box.setVisible(false);
+            Exportbox.setVisible(false);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == ClassmanageBtn) {
+            clearall();
+            TeacherinforBlock.setVisible(false);
+            SubjectBox.setVisible(false);
+            Teachersubjectclass_box.setVisible(true);
+            Exportbox.setVisible(false);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == Fileexportbtn) {
+            clearall();
+            TeacherinforBlock.setVisible(false);
+            SubjectBox.setVisible(false);
+            Teachersubjectclass_box.setVisible(false);
+            Exportbox.setVisible(true);
+            Account_form.setVisible(false);
+        } else if (event.getSource() == AccountBtn) {
+            clearall();
+            TeacherinforBlock.setVisible(false);
+            SubjectBox.setVisible(false);
+            Teachersubjectclass_box.setVisible(false);
+            Exportbox.setVisible(false);
+            Account_form.setVisible(true);
+        }
+
+    }
 
     public void setSemesterBox() {
         ObservableList<String> filteredList = FXCollections.observableArrayList();
@@ -570,14 +661,15 @@ public class AdminController {
             LoginController.showErrorMessage("Lỗi", "Tên không dược chứa chữ số hay kí tự đặc biệt");
             System.out.println("Tên không dược chứa chữ số hay kí hiệu đặc biệt");
         } else if (containsLetterOrSpecialCharacter(WorkYearBox.getText())) {
-            LoginController.showErrorMessage("Lỗi", "Năm làm việc không dc chứa chữ số hay kí tự đặc biệt");
-            System.out.println("Năm làm việc không dc chứa chữ số hay kí tự đặc biệt");
+            LoginController.showErrorMessage("Lỗi", "Năm làm việc không dc chứa chữ cái hay kí tự đặc biệt");
+            System.out.println("Năm làm việc không dc chứa chữ cái hay kí tự đặc biệt");
         } else {
             Connection connection = database.connectDb();
             if (connection != null) {
                 try {
                     Teacher t = new Teacher();
-                    t.setName(Nametf.getText());
+                    String goodname = Person.normalizeName(Nametf.getText());
+                    t.setName(goodname);
                     t.setVietnamesename();
                     Random random = new Random();
                     int generatedId = random.nextInt(99999 - 10000 + 1) + 10000;
@@ -599,7 +691,7 @@ public class AdminController {
                             "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                     PreparedStatement insertStatement = connection.prepareStatement(insertQuery);
                     insertStatement.setString(1, id);
-                    insertStatement.setString(2, Nametf.getText());
+                    insertStatement.setString(2, goodname);
                     insertStatement.setString(3, GenderBox.getValue().equals("Nam") ? "male" : "female");
                     insertStatement.setString(4, BirthDayBox.getValue().toString());
                     insertStatement.setString(5, Addresstf.getText());
@@ -744,6 +836,7 @@ public class AdminController {
                     t.setUserName(rs.getString(8));
                     t.setPassword(rs.getString(9));
                     t.setVietnamesename();
+                    t.setRole(rs.getString(10));
                     filteredList.add(t);
                 }
                 connection.close();
@@ -764,8 +857,8 @@ public class AdminController {
         addressteacher_col.setCellValueFactory(new PropertyValueFactory<>("address"));
         workyear_col.setCellValueFactory(new PropertyValueFactory<>("workYear"));
         salary_col.setCellValueFactory(new PropertyValueFactory<>("formatSalary"));
-
-        TableTeacher.setItems(getTeacherList());
+        ObservableList<Teacher> teacherData = getTeacherList();
+        TableTeacher.setItems(teacherData);
 
         NumberFormat numberFormat = NumberFormat.getIntegerInstance();
         // Thiết lập định dạng hiển thị số nguyên lớn cho TextField
@@ -786,6 +879,16 @@ public class AdminController {
         deleteMenuItem.setOnAction(event -> {
             Teacher selectedteacher = TableTeacher.getSelectionModel().getSelectedItem();
             deleteteacher(selectedteacher);
+        });
+        SearchBtn1.textProperty().addListener((observable, oldValue, newValue) -> {
+            String searchText = newValue.toLowerCase();
+            ObservableList<Teacher> filteredList = FXCollections.observableArrayList();
+            for (Teacher teacher : teacherData) {
+                if (teacher.getVietnamesename().toLowerCase().contains(searchText)) {
+                    filteredList.add(teacher);
+                }
+            }
+            TableTeacher.setItems(filteredList);
         });
     }
 
@@ -975,6 +1078,14 @@ public class AdminController {
         }
     }
 
+    public void showSavePassWord() {
+        Oldpasslb.setVisible(true);
+        Oldpasstf.setVisible(true);
+        Newpasstf.setVisible(true);
+        Newpass_lb.setVisible(true);
+        SavenewpassBtn.setVisible(true);
+    }
+
     public void export() {
         setSemesterBox();
         Exportbtn.setOnAction(event -> {
@@ -985,7 +1096,83 @@ public class AdminController {
         });
     }
 
-    public void initTable() {
+    public void saveNewPassWord(Teacher teacher) {
+        Connection connection = database.connectDb();
+        if (Oldpasstf.getText().isEmpty() || Newpasstf.getText().isEmpty())
+            LoginController.showErrorMessage("Lỗi", "Vui lòng nhập đầy đủ thông tin");
+        else {
+            if (connection != null) {
+                try {
+                    String sql = "SELECT * FROM teachers WHERE username = '" + teacher.getUserName() + "' AND PASSWORD = '" + Oldpasstf.getText() + "'";
+                    Statement statement = connection.createStatement();
+                    ResultSet rs = statement.executeQuery(sql);
+                    if (rs.next()) {
+                        String sql1 = "UPDATE teachers SET password = '" + Newpasstf.getText() + "' WHERE username = '" + teacher.getUserName() + "'";
+                        Statement statement1 = connection.createStatement();
+                        int rowsInserted = statement1.executeUpdate(sql1);
+                        if (rowsInserted > 0) {
+                            System.out.println("Đổi mật khẩu thành công!");
+                            LoginController.showSuccessMessage("thành công", "Đổi mật khẩu thành công!");
+                            Oldpasslb.setVisible(false);
+                            Oldpasstf.setVisible(false);
+                            Newpasstf.setVisible(false);
+                            Newpass_lb.setVisible(false);
+                            SavenewpassBtn.setVisible(false);
+                            Oldpasstf.clear();
+                            Newpasstf.clear();
+                        } else {
+                            System.out.println("Đổi mật khẩu thất bại!");
+                        }
+
+                    } else
+                        LoginController.showErrorMessage("Lỗi", "Sai mật khẩu cũ");
+
+                    connection.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    public void logout(Button Logoutbtn) {
+        LoginController.showSuccessMessage("Thành công", "Đăng xuất thành công!");
+        Stage stage = (Stage) Logoutbtn.getScene().getWindow();
+        stage.close();
+        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("login-form.fxml"));
+        try {
+            Parent root = fxmlLoader.load();
+            Stage stage1 = new Stage();
+            Scene scene = new Scene(root);
+            root.setOnMousePressed((MouseEvent event) -> {
+                x = event.getSceneX();
+                y = event.getSceneY();
+                x1 = event.getScreenX();
+                y1 = event.getScreenY();
+                System.out.println(x + " " + y + " " + x1 + " " + y1);
+            });
+
+            root.setOnMouseDragged((MouseEvent event) -> {
+                stage1.setX(event.getScreenX() - x);
+                stage1.setY(event.getScreenY() - y);
+            });
+
+//
+//        else
+//            System.out.println("fail to connect database");
+            stage1.initStyle(StageStyle.TRANSPARENT);
+            stage1.setTitle("Hệ thống quản lý trường thcs");
+            stage1.setScene(scene);
+            stage1.show();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
+
+    public void initTable(Teacher teacher) {
         GenderBox.getItems().addAll("Nam", "Nữ");
         GenderBox.setValue("Nam");
         TableColumn<Teacher, Integer> indexColumn = new TableColumn<>("STT");
@@ -1001,6 +1188,18 @@ public class AdminController {
         updateTableSubject();
         updateTableSubjectClass();
         export();
+        Usernametf_acc.setText(teacher.getUserName());
+        ChangepassBtn.setOnAction(event -> {
+            showSavePassWord();
+        });
+
+        SavenewpassBtn.setOnAction(event -> {
+            saveNewPassWord(teacher);
+        });
+
+        Logoutbtn.setOnAction(event -> {
+            logout(Logoutbtn);
+        });
     }
 
 

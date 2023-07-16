@@ -21,6 +21,8 @@ public class EditstudentgradeController {
 
     @FXML
     private TableColumn<Grade, String> gradeid_col;
+    @FXML
+    private Button Savebtn;
 
 
     public ObservableList<Grade> getStudentGradeValue(Student selectedstudent, String semesterid, String subjectname) {
@@ -184,6 +186,12 @@ public class EditstudentgradeController {
                 String editft = "delete";
                 deleteGrade(grade, selectedstudent, semesterid, subjectname, editft, GradetypeBox.getValue());
             }
+        });
+
+        Savebtn.setOnAction(event -> {
+            Stage stage = (Stage) Savebtn.getScene().getWindow();
+            LoginController.showSuccessMessage("Thành công", "Lưu điểm thành công");
+            stage.close();
         });
 
     }

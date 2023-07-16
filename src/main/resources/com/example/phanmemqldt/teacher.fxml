@@ -2,22 +2,27 @@
 
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import java.net.URL?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="900.0" prefWidth="1112.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.TeacherController">
+<AnchorPane prefHeight="877.0" prefWidth="1112.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.TeacherController">
    <children>
-      <VBox fx:id="VBoxAdmin" prefHeight="900.0" prefWidth="347.0">
+      <VBox fx:id="VBoxAdmin" prefHeight="906.0" prefWidth="347.0">
          <children>
-            <AnchorPane fx:id="Slider" prefHeight="901.0" prefWidth="347.0" styleClass="slider">
+            <AnchorPane fx:id="Slider" prefHeight="928.0" prefWidth="347.0" styleClass="slider">
                <children>
-                  <Button fx:id="SubjectClassBtn" layoutY="278.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp bộ môn">
+                  <Button fx:id="SubjectClassBtn" layoutY="278.0" mnemonicParsing="false" onAction="#swithForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp bộ môn">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -25,7 +30,7 @@
                         <FontAwesomeIconView glyphName="INFO_CIRCLE" styleClass="icon-slider" />
                      </graphic>
                   </Button>
-                  <Button fx:id="HomeroomclassBtn" layoutY="364.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp chủ nhiệm">
+                  <Button fx:id="HomeroomclassBtn" layoutY="364.0" mnemonicParsing="false" onAction="#swithForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp chủ nhiệm">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -33,7 +38,7 @@
                         <FontAwesomeIconView glyphName="BOOK" styleClass="icon-slider" />
                      </graphic>
                   </Button>
-                  <Button fx:id="LineChartBtn" layoutY="452.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Thống kê điểm">
+                  <Button fx:id="LineChartBtn" layoutY="452.0" mnemonicParsing="false" onAction="#swithForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Thống kê điểm">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -47,12 +52,20 @@
                         <Font name="Arial" size="22.0" />
                      </font>
                   </Label>
-                  <Button fx:id="AccountBtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
+                  <Button fx:id="AccountBtn" layoutY="548.0" mnemonicParsing="false" onAction="#swithForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
                      <graphic>
                         <FontAwesomeIconView glyphName="USER_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="Logoutbtn" layoutY="862.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Đăng xuất">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SIGN_OUT" styleClass="icon-slider" />
                      </graphic>
                   </Button>
                </children>
@@ -63,7 +76,7 @@
             </AnchorPane>
          </children>
       </VBox>
-      <AnchorPane layoutX="347.0" prefHeight="906.0" prefWidth="765.0" visible="false">
+      <AnchorPane fx:id="Subjectclass_form" layoutX="347.0" prefHeight="906.0" prefWidth="765.0">
          <children>
             <Label layoutX="44.0" layoutY="106.0" prefHeight="17.0" prefWidth="42.0" text="Lớp :">
                <font>
@@ -91,7 +104,7 @@
             <ComboBox fx:id="SemesterBox" layoutX="571.0" layoutY="107.0" prefHeight="25.0" prefWidth="105.0" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="347.0" prefHeight="906.0" prefWidth="765.0">
+      <AnchorPane fx:id="Homeroomclass_form" layoutX="347.0" prefHeight="906.0" prefWidth="765.0" visible="false">
          <children>
             <ComboBox fx:id="NamehomeroomclassBox" layoutX="100.0" layoutY="70.0" prefHeight="25.0" prefWidth="91.0" />
             <Label layoutX="50.0" layoutY="69.0" text="Lớp :">
@@ -119,6 +132,38 @@
             </Label>
             <ComboBox fx:id="SemestergradehomeroomclassBox" layoutX="509.0" layoutY="454.0" prefHeight="25.0" prefWidth="117.0" />
             <Button fx:id="Excelbtn" layoutX="445.0" layoutY="70.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="130.0" text="Nhập từ file excel" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="Analysis_form" layoutX="347.0" prefHeight="906.0" prefWidth="765.0" visible="false">
+         <children>
+            <Label layoutX="39.0" layoutY="56.0" text="Chọn lớp :" />
+            <ComboBox fx:id="classname_ana" layoutX="104.0" layoutY="52.0" prefHeight="25.0" prefWidth="117.0" />
+            <Label layoutX="253.0" layoutY="56.0" text="Chọn môn :" />
+            <ComboBox fx:id="subjectname_ana" layoutX="318.0" layoutY="52.0" prefHeight="25.0" prefWidth="117.0" />
+            <Label layoutX="476.0" layoutY="56.0" text="Kì học :" />
+            <ComboBox fx:id="semesterbox_ana" layoutX="541.0" layoutY="52.0" prefHeight="25.0" prefWidth="117.0" />
+            <Label layoutX="39.0" layoutY="137.0" text="Đầu điểm :" />
+            <ComboBox fx:id="gradetype_ana" layoutX="104.0" layoutY="133.0" prefHeight="25.0" prefWidth="117.0" />
+            <LineChart fx:id="Linechartgrade" layoutX="55.0" layoutY="268.0" prefHeight="603.0" prefWidth="671.0">
+              <xAxis>
+                <CategoryAxis side="BOTTOM" fx:id="xaxis" />
+              </xAxis>
+              <yAxis>
+                <NumberAxis fx:id="yaxis" side="LEFT" />
+              </yAxis>
+            </LineChart>
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="Account_form" layoutX="347.0" prefHeight="906.0" prefWidth="765.0" visible="false">
+         <children>
+            <Label layoutX="54.0" layoutY="91.0" text="Username :" />
+            <TextField fx:id="Usernametf_acc" editable="false" layoutX="127.0" layoutY="87.0" />
+            <Button fx:id="ChangepassBtn" layoutX="54.0" layoutY="128.0" mnemonicParsing="false" text="Đổi mật khẩu" />
+            <Label fx:id="Oldpasslb" layoutX="42.0" layoutY="185.0" text="Mật khẩu cũ :" visible="false" />
+            <Label fx:id="Newpass_lb" layoutX="38.0" layoutY="257.0" text="Mật khẩu mới :" visible="false" />
+            <Button fx:id="SavenewpassBtn" layoutX="38.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="Lưu" visible="false" />
+            <PasswordField fx:id="Oldpasstf" layoutX="127.0" layoutY="181.0" visible="false" />
+            <PasswordField fx:id="Newpasstf" layoutX="127.0" layoutY="253.0" visible="false" />
          </children>
       </AnchorPane>
    </children>

@@ -6,6 +6,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
@@ -15,11 +16,11 @@
 
 <AnchorPane prefHeight="877.0" prefWidth="1228.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.phanmemqldt.AdminController">
    <children>
-      <VBox fx:id="VBoxAdmin" layoutY="2.0" prefHeight="888.0" prefWidth="337.0">
+      <VBox fx:id="VBoxAdmin" prefHeight="895.0" prefWidth="308.0">
          <children>
-            <AnchorPane fx:id="Slider" prefHeight="910.0" prefWidth="342.0" styleClass="slider">
+            <AnchorPane fx:id="Slider" prefHeight="895.0" prefWidth="332.0" styleClass="slider">
                <children>
-                  <Button fx:id="TeacherInforBtn" layoutY="278.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý giáo viên">
+                  <Button fx:id="TeacherInforBtn" layoutY="278.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý giáo viên">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -27,7 +28,7 @@
                         <FontAwesomeIconView glyphName="INFO_CIRCLE" styleClass="icon-slider" />
                      </graphic>
                   </Button>
-                  <Button fx:id="SubjectmanageBtn" layoutY="364.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý môn học">
+                  <Button fx:id="SubjectmanageBtn" layoutY="364.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý môn học">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -35,7 +36,7 @@
                         <FontAwesomeIconView glyphName="BOOK" styleClass="icon-slider" />
                      </graphic>
                   </Button>
-                  <Button fx:id="ClassmanageBtn" layoutY="452.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp học">
+                  <Button fx:id="ClassmanageBtn" layoutY="452.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Quản lý lớp học">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -49,7 +50,7 @@
                         <Font name="Arial" size="22.0" />
                      </font>
                   </Label>
-                  <Button fx:id="Fileexportbtn" layoutY="548.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="337.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Xuất file">
+                  <Button fx:id="Fileexportbtn" layoutY="548.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Xuất file">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
@@ -57,12 +58,20 @@
                         <FontAwesomeIconView glyphName="FILE" styleClass="icon-slider" />
                      </graphic>
                   </Button>
-                  <Button fx:id="AccountBtn" layoutY="640.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="342.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
+                  <Button fx:id="AccountBtn" layoutY="640.0" mnemonicParsing="false" onAction="#switchForm" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Tài Khoản">
                      <font>
                         <Font name="Arial" size="22.0" />
                      </font>
                      <graphic>
                         <FontAwesomeIconView glyphName="USER_CIRCLE" styleClass="icon-slider" />
+                     </graphic>
+                  </Button>
+                  <Button fx:id="Logoutbtn" layoutY="844.0" mnemonicParsing="false" prefHeight="44.0" prefWidth="347.0" style="-fx-alignment: baseline-left;" styleClass="button-slider" stylesheets="@admin-form.css" text="Đăng xuất">
+                     <font>
+                        <Font name="Arial" size="22.0" />
+                     </font>
+                     <graphic>
+                        <FontAwesomeIconView glyphName="SIGN_OUT" styleClass="icon-slider" />
                      </graphic>
                   </Button>
                </children>
@@ -73,7 +82,7 @@
             </AnchorPane>
          </children>
       </VBox>
-      <AnchorPane fx:id="TeacherinforBlock" layoutX="337.0" prefHeight="888.0" prefWidth="891.0" visible="false">
+      <AnchorPane fx:id="TeacherinforBlock" layoutX="337.0" prefHeight="888.0" prefWidth="891.0">
          <children>
             <TextField fx:id="SearchBtn1" layoutX="11.0" layoutY="36.0" prefHeight="30.0" prefWidth="325.0" promptText="Tìm kiếm" styleClass="searchbtn" stylesheets="@loginform.css" />
             <FontAwesomeIconView fill="#907d7d" glyphName="SEARCH" layoutX="14.0" layoutY="56.0" size="15.0" />
@@ -115,7 +124,7 @@
             <Button fx:id="AddsubjectBtn" layoutX="67.0" layoutY="527.0" mnemonicParsing="false" text="Thêm môn học" />
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0" visible="false">
+      <AnchorPane fx:id="Teachersubjectclass_box" layoutX="337.0" layoutY="2.0" prefHeight="888.0" prefWidth="891.0" visible="false">
          <children>
             <Label layoutX="75.0" layoutY="58.0" prefHeight="17.0" prefWidth="59.0" text="Chọn lớp :" />
             <ComboBox fx:id="Classname_mnc_box" layoutX="152.0" layoutY="54.0" prefHeight="25.0" prefWidth="91.0" />
@@ -135,11 +144,23 @@
             </TableView>
          </children>
       </AnchorPane>
-      <AnchorPane layoutX="342.0" layoutY="2.0" prefHeight="888.0" prefWidth="885.0">
+      <AnchorPane fx:id="Exportbox" layoutX="342.0" layoutY="2.0" prefHeight="888.0" prefWidth="885.0" visible="false">
          <children>
             <ComboBox fx:id="SemesterBox_exp" layoutX="135.0" layoutY="60.0" prefWidth="150.0" />
             <Label layoutX="59.0" layoutY="64.0" text="Chọn học kỳ :" />
             <Button fx:id="Exportbtn" layoutX="59.0" layoutY="127.0" mnemonicParsing="false" text="Xuất file" />
+         </children>
+      </AnchorPane>
+      <AnchorPane fx:id="Account_form" layoutX="347.0" layoutY="-2.0" prefHeight="895.0" prefWidth="879.0" visible="false">
+         <children>
+            <Label layoutX="54.0" layoutY="91.0" text="Username :" />
+            <TextField fx:id="Usernametf_acc" editable="false" layoutX="127.0" layoutY="87.0" />
+            <Button fx:id="ChangepassBtn" layoutX="54.0" layoutY="128.0" mnemonicParsing="false" text="Đổi mật khẩu" />
+            <Label fx:id="Oldpasslb" layoutX="42.0" layoutY="185.0" text="Mật khẩu cũ :" visible="false" />
+            <Label fx:id="Newpass_lb" layoutX="38.0" layoutY="257.0" text="Mật khẩu mới :" visible="false" />
+            <Button fx:id="SavenewpassBtn" layoutX="38.0" layoutY="310.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="Lưu" visible="false" />
+            <PasswordField fx:id="Oldpasstf" layoutX="127.0" layoutY="181.0" visible="false" />
+            <PasswordField fx:id="Newpasstf" layoutX="127.0" layoutY="253.0" visible="false" />
          </children>
       </AnchorPane>
    </children>

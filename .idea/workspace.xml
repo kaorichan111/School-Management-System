@@ -7,9 +7,15 @@
     <list default="true" id="322ab68b-e864-4aa3-aaa8-5646a0473fa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/EditstudentgradeController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/EditstudentgradeController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/EditteacherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/EditteacherController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/LoginController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/LoginController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/module-info.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/module-info.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Gradetype.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Gradetype.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Person.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Person.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Subject.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/data/Subject.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/admin.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/admin.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/teacher.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/teacher.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -55,7 +61,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;jdk.selected.JAVA_MODULE&quot;: &quot;20&quot;,
     &quot;last_opened_file_path&quot;: &quot;C:/Users/Minhh/IdeaProjects/phanmemqldt&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.345977&quot;,
     &quot;settings.editor.selected.configurable&quot;: &quot;actions.on.save&quot;
@@ -124,12 +130,20 @@
       <option name="project" value="LOCAL" />
       <updated>1689140243678</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="thêm xuất file điểm, nhập thông tin hs bằng file excel">
+      <created>1689338034824</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1689338034824</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="sửa code ktpm" />
     <MESSAGE value="Thêm nhập, sửa, xóa học sinh lớp chủ nhiệm" />
-    <option name="LAST_COMMIT_MESSAGE" value="Thêm nhập, sửa, xóa học sinh lớp chủ nhiệm" />
+    <MESSAGE value="thêm xuất file điểm, nhập thông tin hs bằng file excel" />
+    <option name="LAST_COMMIT_MESSAGE" value="thêm xuất file điểm, nhập thông tin hs bằng file excel" />
   </component>
 </project>

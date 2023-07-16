@@ -49,14 +49,15 @@ public class EditteacherController {
             LoginController.showErrorMessage("Lỗi", "Năm làm việc không dc chứa chữ số hay kí tự đặc biệt");
             System.out.println("Năm làm việc không dc chứa chữ số hay kí tự đặc biệt");
         } else {
-            selectedteacher.setName(Nametf.getText());
+            String goodname = Person.normalizeName(Nametf.getText());
+            selectedteacher.setName(goodname);
             selectedteacher.setVietnamesename();
             Connection connection = database.connectDb();
             if (connection != null) {
                 try {
                     String update = "UPDATE teachers SET teachername = ?, gender = ?, birthday = ?, address = ?, workyear = ?, salary = ?, username = ?, role = ? WHERE teacherid = ?";
                     PreparedStatement preparedStatement = connection.prepareStatement(update);
-                    preparedStatement.setString(1, Nametf.getText());
+                    preparedStatement.setString(1, goodname);
                     preparedStatement.setString(2, GenderBox.getValue());
                     preparedStatement.setString(3, BirthdayBox.getValue().toString());
                     preparedStatement.setString(4, Addresstf.getText());

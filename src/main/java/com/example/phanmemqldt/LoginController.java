@@ -1,5 +1,6 @@
 package com.example.phanmemqldt;
 
+import com.example.phanmemqldt.data.*;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.*;
@@ -58,7 +59,9 @@ public class LoginController {
             stage.setTitle("Hệ thống quản lý trường thcs");
             if (role.equals("admin")) {
                 AdminController adminController = fxmlLoader.getController();
-                adminController.initTable();
+                Teacher teacher = new Teacher();
+                teacher.setUserName(UserNameTf.getText());
+                adminController.initTable(teacher);
 
             } else {
                 TeacherController teacherController = fxmlLoader.getController();
@@ -117,8 +120,8 @@ public class LoginController {
                 statement.setString(1, UserNameTf.getText());
                 statement.setString(2, PasswordTf.getText());
                 ResultSet rs = statement.executeQuery();
-                UserNameTf.setText("tubl57116"); // môn bt
-                PasswordTf.setText("123");
+//                UserNameTf.setText("tubl57116"); // môn bt
+//                PasswordTf.setText("123");
 ////                UserNameTf.setText("vinhhn20548"); // môn đặc biệt
 //////                PasswordTf.setText("123");
 //                UserNameTf.setText("admin"); // môn đặc biệt
