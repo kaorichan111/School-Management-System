@@ -16,6 +16,6 @@
           <TableColumn fx:id="gradeid_col" prefWidth="106.0" text="ID Lần nhập" />
         </columns>
       </TableView>
-      <Button fx:id="Savebtn" layoutX="41.0" layoutY="362.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="Lưu" />
+      <Button fx:id="Savebtn" layoutX="41.0" layoutY="362.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="44.0" text="Lưu" visible="false" />
    </children>
 </AnchorPane>

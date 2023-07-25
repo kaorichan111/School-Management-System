@@ -7,6 +7,7 @@
     <list default="true" id="322ab68b-e864-4aa3-aaa8-5646a0473fa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -134,7 +135,14 @@
       <option name="project" value="LOCAL" />
       <updated>1689517758872</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="cải thiện hiệu năng bảng điểm">
+      <created>1690261231964</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1690261231965</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -142,6 +150,7 @@
     <MESSAGE value="Thêm nhập, sửa, xóa học sinh lớp chủ nhiệm" />
     <MESSAGE value="thêm xuất file điểm, nhập thông tin hs bằng file excel" />
     <MESSAGE value="thêm chuyển cảnh, đăng xuất, sửa mật khẩu" />
-    <option name="LAST_COMMIT_MESSAGE" value="thêm chuyển cảnh, đăng xuất, sửa mật khẩu" />
+    <MESSAGE value="cải thiện hiệu năng bảng điểm" />
+    <option name="LAST_COMMIT_MESSAGE" value="cải thiện hiệu năng bảng điểm" />
   </component>
 </project>

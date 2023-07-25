@@ -559,8 +559,8 @@ public class TeacherController {
 //                        // System.out.println("Tổng điểm " + g.getSumGrade());
 //                        //System.out.println(g.getGradestring());
 //                    }
-                    // System.out.println("Điểm tổng kết :" + st.getStudentsubject().getFinalgrade());
-                    //filteredList.add(st);
+//                    System.out.println("Điểm tổng kết :" + st.getStudentsubject().getFinalgrade());
+//                    filteredList.add(st);
                 }
                 rs.close();
                 connection.close();
