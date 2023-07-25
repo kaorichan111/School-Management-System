@@ -24,6 +24,7 @@ import java.sql.*;
 import java.text.*;
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 public class TeacherController {
 
@@ -513,6 +514,19 @@ public class TeacherController {
         }
     }
 
+    public void getStudentGradeForEachGradeType(Student st, Subject s, ComboBox<String> mysemesterbox) {
+        for (Gradetype g : st.getStudentsubject().getGrades()) {
+            updateGradeType(g, st.getStudentid(), s.getSubjectid(), s.getIsspecial(), mysemesterbox);
+            g.setGradestring();
+            g.setSumGrade();
+            // System.out.println("Tổng điểm " + g.getSumGrade());
+            //System.out.println(g.getGradestring());
+        }
+        st.getStudentsubject().setFinalgrade();
+
+    }
+
+
     public ObservableList<Student> getStudentGradeList(Teachersubjectclasses tsc, Subject s, ComboBox<String> mysemesterbox) {
         ObservableList<Student> filteredList = FXCollections.observableArrayList();
         Connection connection = database.connectDb();
@@ -521,9 +535,12 @@ public class TeacherController {
                 String sql = "SELECT studentid, studentname FROM students \n" +
                         "JOIN Classes C ON students.classid = C.classid\n" +
                         "WHERE C.classname = " + "'" + tsc.getClassname() + "'";
-                System.out.println(sql);
+                //System.out.println(sql);
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(sql);
+                List<Student> students = new ArrayList<>();
+                // Tạo danh sách các Callable để thực hiện truy vấn SQL và tính toán các điểm
+                //List<Callable<Student>> tasks = new ArrayList<>();
                 while (rs.next()) {
                     Student st = new Student();
                     st.setStudentid(rs.getString(1));
@@ -532,18 +549,45 @@ public class TeacherController {
                     st.getStudentsubject().setSubjectname(s.getSubjectname());
                     st.getStudentsubject().setIsspecial(s.getIsspecial());
                     st.getStudentsubject().setGrades(getGradeType(s.getIsspecial()));
-                    for (Gradetype g : st.getStudentsubject().getGrades()) {
-                        updateGradeType(g, st.getStudentid(), s.getSubjectid(), s.getIsspecial(), mysemesterbox);
-                        g.setGradestring();
-                        g.setSumGrade();
-                        // System.out.println("Tổng điểm " + g.getSumGrade());
-                        //System.out.println(g.getGradestring());
-                    }
-                    st.getStudentsubject().setFinalgrade();
+                    students.add(st);
+
+
+//                    for (Gradetype g : st.getStudentsubject().getGrades()) {
+//                        updateGradeType(g, st.getStudentid(), s.getSubjectid(), s.getIsspecial(), mysemesterbox);
+//                        g.setGradestring();
+//                        g.setSumGrade();
+//                        // System.out.println("Tổng điểm " + g.getSumGrade());
+//                        //System.out.println(g.getGradestring());
+//                    }
                     // System.out.println("Điểm tổng kết :" + st.getStudentsubject().getFinalgrade());
+                    //filteredList.add(st);
+                }
+                rs.close();
+                connection.close();
+                // Tạo ExecutorService với số luồng tối đa bằng số học sinh
+                ExecutorService executorService = Executors.newFixedThreadPool(students.size());
+
+                // Tạo danh sách các Callable để tính toán điểm của từng học sinh
+                List<Callable<Student>> tasks = new ArrayList<>();
+                for (Student st : students) {
+                    tasks.add(() -> {
+                        getStudentGradeForEachGradeType(st, s, mysemesterbox);
+                        return st;
+                    });
+                }
+
+                // Thực thi các Callable bằng ExecutorService
+                List<Future<Student>> futures = executorService.invokeAll(tasks);
+
+                // Đóng ExecutorService sau khi hoàn thành
+                executorService.shutdown();
+
+                // Lấy kết quả từ các Future và cập nhật vào danh sách filteredList
+                for (Future<Student> future : futures) {
+                    Student st = future.get();
+                    // Cập nhật thông tin điểm vào filteredList
                     filteredList.add(st);
                 }
-                connection.close();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -618,6 +662,7 @@ public class TeacherController {
         Subject s = new Subject();
         Studentidgrade_col.setCellValueFactory(new PropertyValueFactory<>("studentid"));
         Studentnamegrade_col.setCellValueFactory(new PropertyValueFactory<>("name"));
+        Studentnamegrade_col.prefWidthProperty().bind(TableGrade.widthProperty().multiply(0.25));
 
         if (subjectname != null && classname != null && SemesterBox.getValue() != null) {
             for (Teachersubjectclasses sc : teacher.getTeachersubjectclasses()) {
@@ -633,15 +678,15 @@ public class TeacherController {
                 }
             }
             TableGrade.getColumns().subList(2, TableGrade.getColumns().size()).clear();
-            addGradeColumn(s.getIsspecial(), TableGrade);
             TableGrade.setItems(getStudentGradeList(tsc, s, SemesterBox));
+            addGradeColumn(s.getIsspecial(), TableGrade);
             TableGrade.setFixedCellSize(30);
             TableGrade.setPrefHeight(TableGrade.getItems().size() * TableGrade.getFixedCellSize() + TableView.USE_COMPUTED_SIZE);
-
-// Đặt chiều dài theo nội dung của cột
-            for (TableColumn<?, ?> column : TableGrade.getColumns()) {
-                column.prefWidthProperty().bind(TableGrade.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
-            }
+//
+//// Đặt chiều dài theo nội dung của cột
+//            for (TableColumn<?, ?> column : TableGrade.getColumns()) {
+//                column.prefWidthProperty().bind(TableGrade.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
+//            }
             ContextMenu contextMenu = new ContextMenu();
             MenuItem editMenuItem = new MenuItem("Chỉnh sửa");
             contextMenu.getItems().addAll(editMenuItem);
@@ -734,9 +779,9 @@ public class TeacherController {
             Tablegradestudenthomeroom.setPrefHeight(Tablegradestudenthomeroom.getItems().size() * Tablegradestudenthomeroom.getFixedCellSize() + TableView.USE_COMPUTED_SIZE);
 
 // Đặt chiều dài theo nội dung của cột
-            for (TableColumn<?, ?> column : Tablegradestudenthomeroom.getColumns()) {
-                column.prefWidthProperty().bind(Tablegradestudenthomeroom.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
-            }
+//            for (TableColumn<?, ?> column : Tablegradestudenthomeroom.getColumns()) {
+//                column.prefWidthProperty().bind(Tablegradestudenthomeroom.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
+//            }
         } else {
             Tablegradestudenthomeroom.getItems().clear();
         }
@@ -749,9 +794,9 @@ public class TeacherController {
         myTableView.setPrefHeight(myTableView.getItems().size() * myTableView.getFixedCellSize() + TableView.USE_COMPUTED_SIZE);
 
 // Đặt chiều dài theo nội dung của cột
-        for (TableColumn<?, ?> column : myTableView.getColumns()) {
-            column.prefWidthProperty().bind(myTableView.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
-        }
+//        for (TableColumn<?, ?> column : myTableView.getColumns()) {
+//            column.prefWidthProperty().bind(myTableView.widthProperty().multiply(0.25)); // Đặt chiều rộng cột là 25% chiều rộng của bảng
+//        }
     }
 
     public ObservableList<Student> getStudentHomeRoomList(String classname) {
@@ -762,7 +807,7 @@ public class TeacherController {
                 String sql = "SELECT students.* FROM students \n" +
                         "JOIN Classes C ON students.classid = C.classid\n" +
                         "WHERE C.classname = " + "'" + classname + "'";
-                System.out.println(sql);
+                //System.out.println(sql);
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(sql);
                 while (rs.next()) {
@@ -945,7 +990,7 @@ public class TeacherController {
                 Statement statement = connection.createStatement();
                 ResultSet rs = statement.executeQuery(sql);
                 while (rs.next()) {
-                    System.out.println(rs.getString(11));
+                    //System.out.println(rs.getString(11));
                     filteredList.add(rs.getDouble(11));
                 }
                 connection.close();
@@ -963,7 +1008,7 @@ public class TeacherController {
                 count++;
             }
         }
-        System.out.println("Số lượng điểm " + x + " là :" + count);
+        //System.out.println("Số lượng điểm " + x + " là :" + count);
         return count;
     }
 
