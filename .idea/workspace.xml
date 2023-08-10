@@ -6,8 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="322ab68b-e864-4aa3-aaa8-5646a0473fa3" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/example/phanmemqldt/TeacherController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/com/example/phanmemqldt/editstudentgrade.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +140,14 @@
       <option name="project" value="LOCAL" />
       <updated>1690261231965</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="cải thiện hiệu năng bảng điểm">
+      <created>1690293399185</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1690293399185</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
